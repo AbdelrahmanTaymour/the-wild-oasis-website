@@ -1,6 +1,10 @@
 import { getBookings } from "@/app/_lib/data-service";
 import ReservationCard from "@/app/_components/ReservationCard";
 
+export const metadata = {
+  title: "Reservations",
+};
+
 export default async function Page() {
   const bookings = await getBookings(100);
 
