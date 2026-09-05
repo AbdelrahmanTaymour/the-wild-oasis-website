@@ -29,7 +29,7 @@ export type Database = {
           numNights: number
           observations: string | null
           startDate: string
-          status: string | null
+          status: string
           totalPrice: number
         }
         Insert: {
@@ -46,7 +46,7 @@ export type Database = {
           numNights: number
           observations?: string | null
           startDate: string
-          status?: string | null
+          status: string
           totalPrice: number
         }
         Update: {
@@ -63,7 +63,7 @@ export type Database = {
           numNights?: number
           observations?: string | null
           startDate?: string
-          status?: string | null
+          status?: string
           totalPrice?: number
         }
         Relationships: [

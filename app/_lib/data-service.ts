@@ -108,12 +108,13 @@ export interface BookingWithCabin {
   numNights: number;
   numGuests: number;
   totalPrice: number;
+  status: string;
   guestId: number;
   cabinId: number;
   cabins: {
     name: string;
     image: string;
-  } | null;
+  };
 }
 
 export async function getBookings(
@@ -129,6 +130,7 @@ export async function getBookings(
         endDate,
         numNights,
         numGuests,
+        status,
         totalPrice,
         guestId,
         cabinId,
