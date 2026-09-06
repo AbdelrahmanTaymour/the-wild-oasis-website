@@ -11,6 +11,7 @@ import type {
   GuestUpdate,
   Settings,
 } from "./database";
+import { CabinCardData } from "../cabins/types";
 
 /////////////
 // GET
@@ -47,12 +48,7 @@ export async function getCabinPrice(
   return data;
 }
 
-export async function getCabins(): Promise<
-  Pick<
-    Cabin,
-    "id" | "name" | "maxCapacity" | "regularPrice" | "discount" | "image"
-  >[]
-> {
+export async function getCabins(): Promise<CabinCardData[]> {
   const { data, error } = await supabase
     .from("cabins")
     .select("id, name, maxCapacity, regularPrice, discount, image")
