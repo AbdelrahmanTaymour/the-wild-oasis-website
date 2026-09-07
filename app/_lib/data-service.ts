@@ -12,6 +12,7 @@ import type {
   Settings,
 } from "./database";
 import { CabinCardData } from "../cabins/types";
+import { notFound } from "next/navigation";
 
 /////////////
 // GET
@@ -25,7 +26,7 @@ export async function getCabin(id: number): Promise<Cabin> {
 
   if (error) {
     console.error(error);
-    throw new Error("Cabin could not be loaded");
+    notFound();
   }
 
   return data;
