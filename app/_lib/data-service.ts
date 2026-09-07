@@ -25,7 +25,6 @@ export async function getCabin(id: number): Promise<Cabin> {
     .single();
 
   if (error) {
-    console.error(error);
     notFound();
   }
 
