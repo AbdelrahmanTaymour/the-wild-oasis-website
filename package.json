@@ -10,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.1",
     "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.12.6",
     "@supabase/supabase-js": "^2.115.0",

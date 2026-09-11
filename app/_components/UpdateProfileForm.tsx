@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 
 function UpdateProfileForm({ children }: { children: React.ReactNode }) {
-  const [count, setCount] = useState(0);
   // CHANGE
   const countryFlag = "pt.jpg";
   const nationality = "portugal";
@@ -29,7 +28,7 @@ function UpdateProfileForm({ children }: { children: React.ReactNode }) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label htmlFor="nationality">Where are you from?</label>
-          <img
+          <Image
             src={countryFlag}
             alt="Country flag"
             className="h-5 rounded-sm"
