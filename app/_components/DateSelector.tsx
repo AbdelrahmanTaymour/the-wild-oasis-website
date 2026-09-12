@@ -4,6 +4,7 @@ import { DayPicker, type DateRange } from "@daypicker/react";
 import "@daypicker/react/style.css";
 import { isWithinInterval } from "date-fns";
 import { Cabin, Settings } from "../_lib/database";
+import { useReservation } from "../contexts/ReservationContext";
 
 // Properly type the helper arguments
 function isAlreadyBooked(range: DateRange, datesArr: Date[]): boolean {
@@ -25,17 +26,17 @@ function DateSelector({
   bookedDates: Date[];
   cabin: Cabin;
 }) {
+  const { range, setRange, resetRange } = useReservation() as {
+    range: DateRange | undefined;
+    setRange: (range: DateRange | undefined) => void;
+    resetRange: () => void;
+  };
+
   // Static placeholder variables (Replace with your actual state or props)
   const regularPrice = 23;
   const discount = 23;
   const numNights = 23;
   const cabinPrice = 23;
-  const range: DateRange = { from: undefined, to: undefined };
-
-  // Dummy function for reset behavior
-  const resetRange = () => {
-    console.log("Range reset");
-  };
 
   // SETTINGS
   const { minBookingLength, maxBookingLength } = settings;
@@ -50,45 +51,52 @@ function DateSelector({
       <DayPicker
         className="pt-12 place-self-center"
         mode="range"
+        onSelect={setRange}
+        selected={range}
         min={minBookingLength + 1}
         max={maxBookingLength}
         startMonth={new Date()}
         endMonth={new Date(endYear, 11)}
         captionLayout="dropdown"
         numberOfMonths={2}
-        // Custom classes to force active colors, custom hover highlights, and crisp white arrows
         classNames={{
+          // ─────────────────────────────────────────────
+          // MONTHS
+          // ─────────────────────────────────────────────
           months: "flex gap-12",
           month: "space-y-4",
-          month_caption:
-            "flex justify-center pt-1 relative items-center text-primary-200 font-semibold mb-4 capitalize gap-1",
-          weeks: "w-full border-collapse space-y-1",
+          month_caption: "flex justify-center items-center h-8 mb-3",
+          caption_label: "sr-only",
+          dropdowns: "flex items-center justify-center gap-1",
+          dropdown_root: "group flex items-center rounded-md",
+          dropdown:
+            "cursor-pointer rounded-md border border-transparent bg-transparent px-2 py-1 text-lg font-semibold text-primary-100 outline-none transition-colors hover:bg-accent-600 hover:text-white",
+
+          // ─────────────────────────────────────────────
+          // NAVIGATION
+          // ─────────────────────────────────────────────
+          nav: "hidden",
+          button_previous: "hidden",
+          button_next: "hidden",
+
+          // ─────────────────────────────────────────────
+          // CALENDAR
+          // ─────────────────────────────────────────────
+          month_grid: "w-full border-collapse",
           weekdays:
-            "flex justify-between text-primary-400 font-medium text-xs uppercase tracking-wider mb-2",
+            "flex justify-between text-primary-300 font-semibold text-xs uppercase tracking-wide mb-2",
           weekday: "w-9 text-center",
-          week: "flex w-full mt-2 justify-between",
+          week: "flex w-full mt-1 justify-between",
+          today: "!text-accent-300 hover:!text-primary-900",
+          day: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 inline-flex items-center justify-center rounded-full hover:bg-accent-500 hover:text-primary-900 border-transparent hover:border-accent-400 font-semibold text-primary-300",
 
-          // Day structural baseline layout + Hover controls matching the requested palette accents
-          today: "text-primary-300",
-          day: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 inline-flex items-center justify-center rounded-full hover:bg-accent-500 hover:text-primary-900 border border-transparent hover:border-accent-400 transition-all font-semibold text-primary-100",
-
-          // Selected Ranges matching accent state requirements
-          selected: "bg-accent-500 text-primary-900 font-bold rounded-full",
-          range_start: "bg-accent-500 text-primary-900 rounded-full font-bold",
-          range_end: "bg-accent-500 text-primary-900 rounded-full font-bold",
-          range_middle:
-            "bg-accent-500/80 text-primary-900 rounded-full font-semibold",
-          outside: "text-primary-600 opacity-50",
-          disabled:
-            "text-primary-600 line-through opacity-30 cursor-not-allowed",
-          hidden: "invisible",
-
-          // Side navigation arrows
-          nav: "flex items-center justify-between absolute w-full px-4 top-14 left-0 right-0 pointer-events-none z-10 ",
-          button_previous:
-            "pointer-events-auto cursor-pointer p-1 [&_svg]:!fill-white [&_svg]:text-white hover:[&_svg]:text-accent-400 transition-colors",
-          button_next:
-            "pointer-events-auto cursor-pointer p-1 [&_svg]:!fill-white [&_svg]:text-white hover:[&_svg]:text-accent-400 transition-colors",
+          // ─────────────────────────────────────────────
+          // RANGE
+          // ─────────────────────────────────────────────
+          selected: "bg-accent-500 text-primary-900 font-semibold",
+          range_start: "rounded-l-full rounded-r-none",
+          range_middle: "rounded-none",
+          range_end: "rounded-r-full rounded-l-none",
         }}
       />
 
@@ -120,7 +128,7 @@ function DateSelector({
           ) : null}
         </div>
 
-        {range.from || range.to ? (
+        {range?.from || range?.to ? (
           <button
             className="border border-primary-800 py-2 px-4 text-sm font-semibold"
             onClick={resetRange}

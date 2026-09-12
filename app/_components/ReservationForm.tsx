@@ -1,6 +1,13 @@
+"use client";
+
+import { DateRange } from "@daypicker/react";
 import { Cabin } from "../_lib/database";
+import { useReservation } from "../contexts/ReservationContext";
 
 function ReservationForm({ cabin }: { cabin: Cabin }) {
+  const { range } = useReservation() as {
+    range: DateRange | undefined;
+  };
   const maxCapacity = cabin.maxCapacity ?? 0;
 
   return (
@@ -19,6 +26,10 @@ function ReservationForm({ cabin }: { cabin: Cabin }) {
           <p>{user.name}</p>
         </div> */}
       </div>
+
+      <p>
+        {String(range?.from)} to {String(range?.to)}
+      </p>
 
       <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col">
         <div className="space-y-2">
