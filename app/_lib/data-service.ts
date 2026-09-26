@@ -287,24 +287,24 @@ export async function createBooking(
 //   return data;
 // }
 
-export async function updateBooking(
-  id: number,
-  updatedFields: BookingUpdate,
-): Promise<Booking> {
-  const { data, error } = await supabase
-    .from("bookings")
-    .update(updatedFields)
-    .eq("id", id)
-    .select()
-    .single();
+// export async function updateBooking(
+//   id: number,
+//   updatedFields: BookingUpdate,
+// ): Promise<Booking> {
+//   const { data, error } = await supabase
+//     .from("bookings")
+//     .update(updatedFields)
+//     .eq("id", id)
+//     .select()
+//     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Booking could not be updated");
-  }
+//   if (error) {
+//     console.error(error);
+//     throw new Error("Booking could not be updated");
+//   }
 
-  return data;
-}
+//   return data;
+// }
 
 /////////////
 // DELETE
