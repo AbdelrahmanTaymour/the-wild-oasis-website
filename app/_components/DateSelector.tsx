@@ -2,18 +2,24 @@
 
 import { DayPicker, type DateRange } from "@daypicker/react";
 import "@daypicker/react/style.css";
-import { isWithinInterval } from "date-fns";
+import {
+  differenceInDays,
+  isPast,
+  isSameDay,
+  isWithinInterval,
+} from "date-fns";
 import { Cabin, Settings } from "../_lib/database";
 import { useReservation } from "../contexts/ReservationContext";
 
 // Properly type the helper arguments
-function isAlreadyBooked(range: DateRange, datesArr: Date[]): boolean {
-  return !!(
-    range.from &&
-    range.to &&
-    datesArr.some((date) =>
-      isWithinInterval(date, { start: range.from!, end: range.to! }),
-    )
+function isAlreadyBooked(
+  range: DateRange | undefined,
+  datesArr: Date[],
+): boolean {
+  if (!range?.from || !range.to) return false;
+
+  return datesArr.some((date) =>
+    isWithinInterval(date, { start: range.from!, end: range.to! }),
   );
 }
 
@@ -32,11 +38,16 @@ function DateSelector({
     resetRange: () => void;
   };
 
-  // Static placeholder variables (Replace with your actual state or props)
-  const regularPrice = 23;
-  const discount = 23;
-  const numNights = 23;
-  const cabinPrice = 23;
+  const displayRange: DateRange | undefined = isAlreadyBooked(range, bookedDates)
+    ? undefined
+    : range;
+
+  const { regularPrice, discount } = cabin;
+  const numNights =
+    displayRange?.from && displayRange?.to
+      ? differenceInDays(displayRange.to, displayRange.from)
+      : 0;
+  const cabinPrice = numNights * (regularPrice - discount);
 
   // SETTINGS
   const { minBookingLength, maxBookingLength } = settings;
@@ -52,13 +63,17 @@ function DateSelector({
         className="pt-12 place-self-center"
         mode="range"
         onSelect={setRange}
-        selected={range}
+        selected={displayRange}
         min={minBookingLength + 1}
         max={maxBookingLength}
         startMonth={new Date()}
         endMonth={new Date(endYear, 11)}
         captionLayout="dropdown"
         numberOfMonths={2}
+        disabled={(curDate) =>
+          isPast(curDate) ||
+          bookedDates.some((date) => isSameDay(date, curDate))
+        }
         classNames={{
           // ─────────────────────────────────────────────
           // MONTHS
