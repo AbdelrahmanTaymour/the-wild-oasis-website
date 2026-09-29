@@ -2,17 +2,18 @@ import { getBookedDatesByCabinId, getCabin } from "@/app/_lib/data-service";
 
 interface RouteParams {
   params: Promise<{
-    cabinId: number;
+    cabinId: string;
   }>;
 }
 
 export async function GET(request: Request, { params }: RouteParams) {
   const { cabinId } = await params;
+  const id = Number(cabinId);
 
   try {
     const [cabin, bookedDates] = await Promise.all([
-      getCabin(cabinId),
-      getBookedDatesByCabinId(cabinId),
+      getCabin(id),
+      getBookedDatesByCabinId(id),
     ]);
 
     return Response.json({ cabin, bookedDates });
