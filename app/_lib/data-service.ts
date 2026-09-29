@@ -248,22 +248,22 @@ export async function createGuest(newGuest: GuestInsert): Promise<Guest> {
   return data;
 }
 
-export async function createBooking(
-  newBooking: BookingInsert,
-): Promise<Booking> {
-  const { data, error } = await supabase
-    .from("bookings")
-    .insert(newBooking)
-    .select()
-    .single();
+// export async function createBooking(
+//   newBooking: BookingInsert,
+// ): Promise<Booking> {
+//   const { data, error } = await supabase
+//     .from("bookings")
+//     .insert(newBooking)
+//     .select()
+//     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Booking could not be created");
-  }
+//   if (error) {
+//     console.error(error);
+//     throw new Error("Booking could not be created");
+//   }
 
-  return data;
-}
+//   return data;
+// }
 
 /////////////
 // UPDATE
